@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { fetchFormStructure } from "../api";
 import DynamicForm from "../components/DynamicForm";
-import { IFormStructure } from "../types/general";
+import { IForm } from "../types/general";
 
 const ApplyForm = () => {
-  const [formStructures, setFormStructures] = useState<IFormStructure[]>([]);
-  const [selectedForm, setSelectedForm] = useState<IFormStructure | null>(null);
+  const [formStructures, setFormStructures] = useState<IForm[]>([]);
+  const [selectedForm, setSelectedForm] = useState<IForm | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,6 +25,8 @@ const ApplyForm = () => {
 
     getForms();
   }, []);
+
+  console.log("form structures", formStructures);
 
   if (loading)
     return <p className="text-center text-gray-600">Loading forms...</p>;
@@ -55,7 +57,9 @@ const ApplyForm = () => {
         ))}
       </select>
 
-      {selectedForm && <DynamicForm formStructure={selectedForm} />}
+      {selectedForm && (
+        <DynamicForm formStructure={selectedForm} onSubmit={() => {}} />
+      )}
     </div>
   );
 };

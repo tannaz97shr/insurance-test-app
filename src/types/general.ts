@@ -10,12 +10,35 @@ export interface IFormData {
 export interface IFormField {
   id: string;
   label: string;
-  type: string;
-  fields: IFormField[];
+  type: "text" | "number" | "date" | "select" | "radio" | "checkbox" | "group";
+  required?: boolean;
+  options?: string[];
+  fields?: IFormField[];
+  dynamicOptions?: {
+    dependsOn: string;
+    endpoint: string;
+    method: "GET" | "POST";
+  };
+  validation?: {
+    min?: number;
+    max?: number;
+    pattern?: string;
+  };
+  visibility?: {
+    dependsOn: string;
+    condition: "equals";
+    value: string;
+  };
 }
 
-export interface IFormStructure {
+export interface IForm {
   fields: IFormField[];
   formId: string;
   title: string;
+}
+
+export interface IFetchDynamicOptionsParams {
+  dependsOn: string;
+  endpoint: string;
+  method: "GET" | "POST";
 }
