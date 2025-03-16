@@ -147,7 +147,6 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
             )}
           </div>
         );
-
       case "radio":
         return (
           <div key={field.id} className="mb-4">
@@ -162,7 +161,13 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
                 <div className="flex gap-4">
                   {field.options?.map((option) => (
                     <label key={option} className="flex items-center space-x-2">
-                      <input type="radio" {...controllerField} />
+                      <input
+                        type="radio"
+                        {...controllerField}
+                        value={option}
+                        checked={controllerField.value === option}
+                        onChange={() => controllerField.onChange(option)}
+                      />
                       <span>{option}</span>
                     </label>
                   ))}
@@ -225,12 +230,18 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
       className="p-4 border rounded shadow-md"
     >
       <h2 className="text-2xl font-bold mb-4">{formStructure.title}</h2>
-      {formStructure.fields.map((section) => (
-        <div key={section.id}>
-          <h3 className="text-xl font-semibold mb-2">{section.label}</h3>
-          {section.fields?.map((field) => renderField(field))}
-        </div>
-      ))}
+      {formStructure.fields.map((field) =>
+        field.type === "group" ? (
+          // Render grouped fields inside a section
+          <div key={field.id} className="mb-4">
+            <h3 className="text-xl font-semibold mb-2">{field.label}</h3>
+            {field.fields?.map((nestedField) => renderField(nestedField))}
+          </div>
+        ) : (
+          // Render independent fields directly
+          renderField(field)
+        )
+      )}
       <button
         type="submit"
         className="bg-blue-500 text-white px-4 py-2 rounded"
