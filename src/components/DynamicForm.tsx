@@ -71,7 +71,9 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
       case "date":
         return (
           <div key={field.id} className="mb-4">
-            <label className="block text-gray-700">{field.label}</label>
+            <label className="block text-gray-800 font-medium mb-2">
+              {field.label}
+            </label>
             <Controller
               name={field.id}
               control={control}
@@ -91,12 +93,12 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
                 <input
                   type={field.type}
                   {...controllerField}
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                 />
               )}
             />
             {errors[field.id] && (
-              <p className="text-red-500">
+              <p className="text-red-500 text-sm mt-1">
                 {errors[field.id]?.message as string}
               </p>
             )}
@@ -106,51 +108,9 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
       case "select":
         return (
           <div key={field.id} className="mb-4">
-            <label className="block text-gray-700">{field.label}</label>
-            <Controller
-              name={field.id}
-              control={control}
-              rules={{
-                required: field.required ? `${field.label} is required` : false,
-              }}
-              render={({ field: controllerField }) => {
-                return (
-                  <select
-                    {...controllerField}
-                    className="w-full border rounded px-3 py-2"
-                    onChange={(e) => {
-                      controllerField.onChange(e.target.value);
-                      if (field.dynamicOptions) {
-                        fetchDynamicOptions(field, e.target.value);
-                        setValue(field.id, ""); // Reset dependent field
-                      }
-                    }}
-                  >
-                    <option value="">Select {field.label}</option>
-                    {(
-                      dynamicOptions[field.id]?.[field.id + "s"] ||
-                      field.options ||
-                      []
-                    ).map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                );
-              }}
-            />
-            {errors[field.id] && (
-              <p className="text-red-500">
-                {errors[field.id]?.message as string}
-              </p>
-            )}
-          </div>
-        );
-      case "radio":
-        return (
-          <div key={field.id} className="mb-4">
-            <label className="block text-gray-700">{field.label}</label>
+            <label className="block text-gray-800 font-medium mb-2">
+              {field.label}
+            </label>
             <Controller
               name={field.id}
               control={control}
@@ -158,24 +118,73 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
                 required: field.required ? `${field.label} is required` : false,
               }}
               render={({ field: controllerField }) => (
-                <div className="flex gap-4">
+                <select
+                  {...controllerField}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                  onChange={(e) => {
+                    controllerField.onChange(e.target.value);
+                    if (field.dynamicOptions) {
+                      fetchDynamicOptions(field, e.target.value);
+                      setValue(field.id, ""); // Reset dependent field
+                    }
+                  }}
+                >
+                  <option value="">Select {field.label}</option>
+                  {(
+                    dynamicOptions[field.id]?.[field.id + "s"] ||
+                    field.options ||
+                    []
+                  ).map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              )}
+            />
+            {errors[field.id] && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors[field.id]?.message as string}
+              </p>
+            )}
+          </div>
+        );
+
+      case "radio":
+        return (
+          <div key={field.id} className="mb-4">
+            <label className="block text-gray-800 font-medium mb-2">
+              {field.label}
+            </label>
+            <Controller
+              name={field.id}
+              control={control}
+              rules={{
+                required: field.required ? `${field.label} is required` : false,
+              }}
+              render={({ field: controllerField }) => (
+                <div className="flex flex-wrap gap-4">
                   {field.options?.map((option) => (
-                    <label key={option} className="flex items-center space-x-2">
+                    <label
+                      key={option}
+                      className="flex items-center space-x-2 cursor-pointer"
+                    >
                       <input
                         type="radio"
                         {...controllerField}
                         value={option}
                         checked={controllerField.value === option}
                         onChange={() => controllerField.onChange(option)}
+                        className="h-4 w-4 text-blue-500 focus:ring-2 focus:ring-blue-500"
                       />
-                      <span>{option}</span>
+                      <span className="text-gray-700">{option}</span>
                     </label>
                   ))}
                 </div>
               )}
             />
             {errors[field.id] && (
-              <p className="text-red-500">
+              <p className="text-red-500 text-sm mt-1">
                 {errors[field.id]?.message as string}
               </p>
             )}
@@ -185,7 +194,9 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
       case "checkbox":
         return (
           <div key={field.id} className="mb-4">
-            <label className="block text-gray-700">{field.label}</label>
+            <label className="block text-gray-800 font-medium mb-2">
+              {field.label}
+            </label>
             <Controller
               name={field.id}
               control={control}
@@ -193,18 +204,25 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
                 required: field.required ? `${field.label} is required` : false,
               }}
               render={({ field: controllerField }) => (
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-4">
                   {field.options?.map((option) => (
-                    <label key={option} className="flex items-center space-x-2">
-                      <input type="checkbox" {...controllerField} />
-                      <span>{option}</span>
+                    <label
+                      key={option}
+                      className="flex items-center space-x-2 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        {...controllerField}
+                        className="h-4 w-4 text-blue-500 focus:ring-2 focus:ring-blue-500"
+                      />
+                      <span className="text-gray-700">{option}</span>
                     </label>
                   ))}
                 </div>
               )}
             />
             {errors[field.id] && (
-              <p className="text-red-500">
+              <p className="text-red-500 text-sm mt-1">
                 {errors[field.id]?.message as string}
               </p>
             )}
@@ -213,8 +231,13 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
 
       case "group":
         return (
-          <fieldset key={field.id} className="border p-4 mb-4 rounded">
-            <legend className="text-lg font-semibold">{field.label}</legend>
+          <fieldset
+            key={field.id}
+            className="border border-gray-300 p-4 mb-4 rounded-lg shadow-sm"
+          >
+            <legend className="text-lg font-semibold text-gray-800">
+              {field.label}
+            </legend>
             {field.fields?.map((nestedField) => renderField(nestedField))}
           </fieldset>
         );
@@ -227,24 +250,31 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="p-4 border rounded shadow-md"
+      className="bg-white shadow-lg rounded-xl p-6 max-w-lg mx-auto border border-gray-200"
     >
-      <h2 className="text-2xl font-bold mb-4">{formStructure.title}</h2>
-      {formStructure.fields.map((field) =>
-        field.type === "group" ? (
-          // Render grouped fields inside a section
-          <div key={field.id} className="mb-4">
-            <h3 className="text-xl font-semibold mb-2">{field.label}</h3>
-            {field.fields?.map((nestedField) => renderField(nestedField))}
-          </div>
-        ) : (
-          // Render independent fields directly
-          renderField(field)
-        )
-      )}
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        {formStructure.title}
+      </h2>
+      <div className="space-y-4">
+        {formStructure.fields.map((field) =>
+          field.type === "group" ? (
+            <div
+              key={field.id}
+              className="mb-6 p-4 border rounded-lg bg-gray-50"
+            >
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                {field.label}
+              </h3>
+              <div className="space-y-4">{field.fields?.map(renderField)}</div>
+            </div>
+          ) : (
+            renderField(field)
+          )
+        )}
+      </div>
       <button
         type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="w-full bg-blue-600 text-white font-medium py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 mt-4"
       >
         Submit
       </button>
