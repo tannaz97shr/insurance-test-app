@@ -9,6 +9,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { fetchApplications } from "../api";
 import { IApplicationData, IApplicationsResponse } from "../types/general";
 
@@ -71,7 +72,14 @@ const Home = () => {
 
   return (
     <div className="max-w-7xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
-      {/* 🔍 Search Input */}
+      <div className="mb-4 text-right">
+        <Link
+          to="/apply"
+          className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow hover:bg-blue-700 transition"
+        >
+          Apply Now
+        </Link>
+      </div>
       <input
         type="text"
         placeholder="Search applications..."
@@ -80,7 +88,6 @@ const Home = () => {
         className="w-full p-3 mb-4 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
       />
 
-      {/* 🗂 Column Visibility Toggle */}
       <div className="flex flex-wrap gap-4 mb-4">
         {table.getAllColumns().map((column) => (
           <label key={column.id} className="flex items-center gap-2">
@@ -94,8 +101,6 @@ const Home = () => {
           </label>
         ))}
       </div>
-
-      {/* 📊 Responsive Table */}
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-300 shadow-md rounded-md text-sm md:text-base">
           {/* Table Header */}
@@ -123,7 +128,6 @@ const Home = () => {
             ))}
           </thead>
 
-          {/* Table Body */}
           <tbody className="divide-y divide-gray-200 bg-white">
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="hover:bg-gray-100 transition">
@@ -137,8 +141,6 @@ const Home = () => {
           </tbody>
         </table>
       </div>
-
-      {/* 📃 Pagination Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
         <button
           onClick={() => table.previousPage()}
