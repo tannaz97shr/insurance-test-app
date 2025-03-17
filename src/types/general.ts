@@ -42,3 +42,13 @@ export interface IFetchDynamicOptionsParams {
   endpoint: string;
   method: "GET" | "POST";
 }
+
+export interface IApplicationData {
+  id: string;
+  [key: string]: string | number; // Dynamic keys from the API
+}
+
+export interface IApplicationsResponse {
+  columns: string[];
+  data: IApplicationData[];
+}
