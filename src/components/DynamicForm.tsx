@@ -45,14 +45,11 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
           [field.id]: res,
         }));
       };
-      console.log("depe", dependencies, "child", childFields);
       dependencies.forEach((dep) => {
         const watchValue = watch(dep);
 
         if (watchValue) {
           const dependentFields = childFields.filter((f) => f.id === dep);
-          console.log("dependentFields", dependentFields);
-          console.log("watchValue", watchValue);
 
           dependentFields.forEach((field) =>
             getDynamicOptions(
@@ -87,7 +84,7 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
       case "date":
         return (
           <div key={field.id} className="mb-4">
-            <label className="block text-gray-800 font-medium mb-2">
+            <label className="block text-gray-800 dark:text-gray-200 font-medium mb-2">
               {field.label}
             </label>
             <Controller
@@ -109,7 +106,7 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
                 <input
                   type={field.type}
                   {...controllerField}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                 />
               )}
             />
@@ -124,7 +121,7 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
       case "select":
         return (
           <div key={field.id} className="mb-4">
-            <label className="block text-gray-800 font-medium mb-2">
+            <label className="block text-gray-800 dark:text-gray-200 font-medium mb-2">
               {field.label}
             </label>
             <Controller
@@ -136,7 +133,7 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
               render={({ field: controllerField }) => (
                 <select
                   {...controllerField}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                   onChange={(e) => {
                     controllerField.onChange(e.target.value);
                     if (field.dynamicOptions) {
@@ -168,7 +165,7 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
       case "radio":
         return (
           <div key={field.id} className="mb-4">
-            <label className="block text-gray-800 font-medium mb-2">
+            <label className="block text-gray-800 dark:text-gray-200 font-medium mb-2">
               {field.label}
             </label>
             <Controller
@@ -192,7 +189,9 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
                         onChange={() => controllerField.onChange(option)}
                         className="h-4 w-4 text-blue-500 focus:ring-2 focus:ring-blue-500"
                       />
-                      <span className="text-gray-700">{option}</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {option}
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -209,7 +208,7 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
       case "checkbox":
         return (
           <div key={field.id} className="mb-4">
-            <label className="block text-gray-800 font-medium mb-2">
+            <label className="block text-gray-800 dark:text-gray-200 font-medium mb-2">
               {field.label}
             </label>
             <Controller
@@ -230,7 +229,9 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
                         {...controllerField}
                         className="h-4 w-4 text-blue-500 focus:ring-2 focus:ring-blue-500"
                       />
-                      <span className="text-gray-700">{option}</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {option}
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -248,9 +249,9 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
         return (
           <fieldset
             key={field.id}
-            className="border border-gray-300 p-4 mb-4 rounded-lg shadow-sm"
+            className="border border-gray-300 dark:border-gray-600 p-4 mb-4 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-800"
           >
-            <legend className="text-lg font-semibold text-gray-800">
+            <legend className="text-lg font-semibold text-gray-800 dark:text-gray-200">
               {field.label}
             </legend>
             {field.fields?.map((nestedField) => renderField(nestedField))}
@@ -265,9 +266,9 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white shadow-lg rounded-xl p-6 max-w-lg mx-auto border border-gray-200"
+      className="bg-white dark:bg-gray-900 shadow-lg rounded-xl p-6 max-w-lg mx-auto border border-gray-200 dark:border-gray-700"
     >
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6 text-center">
         {formStructure.title}
       </h2>
       <div className="space-y-4">
@@ -275,9 +276,9 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
           field.type === "group" ? (
             <div
               key={field.id}
-              className="mb-6 p-4 border rounded-lg bg-gray-50"
+              className="mb-6 p-4 border rounded-lg bg-gray-50 dark:bg-gray-800"
             >
-              <h3 className="text-lg font-semibold text-gray-700 mb-3">
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">
                 {field.label}
               </h3>
               <div className="space-y-4">{field.fields?.map(renderField)}</div>

@@ -47,8 +47,6 @@ const Home = () => {
     getApplications();
   }, []);
 
-  console.log(applications);
-
   const table = useReactTable({
     data: applications,
     columns,
@@ -71,11 +69,11 @@ const Home = () => {
     );
 
   return (
-    <div className="max-w-7xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-7xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
       <div className="mb-4 text-right">
         <Link
           to="/apply"
-          className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow hover:bg-blue-700 transition"
+          className="inline-block bg-blue-600 text-white dark:bg-blue-500 dark:hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-semibold shadow hover:bg-blue-700 transition"
         >
           Apply Now
         </Link>
@@ -85,7 +83,7 @@ const Home = () => {
         placeholder="Search applications..."
         value={globalFilter}
         onChange={(e) => setGlobalFilter(e.target.value)}
-        className="w-full p-3 mb-4 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+        className="w-full p-3 mb-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
       />
 
       <div className="flex flex-wrap gap-4 mb-4">
@@ -97,21 +95,24 @@ const Home = () => {
               onChange={() => column.toggleVisibility(!column.getIsVisible())}
               className="h-5 w-5 accent-blue-600"
             />
-            <span className="text-gray-700 text-sm">{column.id}</span>
+            <span className="text-gray-700 dark:text-gray-300 text-sm">
+              {column.id}
+            </span>
           </label>
         ))}
       </div>
+
       <div className="overflow-x-auto">
-        <table className="w-full border border-gray-300 shadow-md rounded-md text-sm md:text-base">
+        <table className="w-full border border-gray-300 dark:border-gray-600 shadow-md rounded-md text-sm md:text-base">
           {/* Table Header */}
-          <thead className="bg-blue-600 text-white">
+          <thead className="bg-blue-600 text-white dark:bg-blue-500">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
-                    className="px-4 py-3 text-left cursor-pointer hover:bg-blue-500 transition"
+                    className="px-4 py-3 text-left cursor-pointer hover:bg-blue-500 dark:hover:bg-blue-400 transition"
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -128,11 +129,17 @@ const Home = () => {
             ))}
           </thead>
 
-          <tbody className="divide-y divide-gray-200 bg-white">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-100 transition">
+              <tr
+                key={row.id}
+                className="hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-3 whitespace-nowrap">
+                  <td
+                    key={cell.id}
+                    className="px-4 py-3 whitespace-nowrap text-gray-900 dark:text-gray-200"
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
@@ -141,22 +148,23 @@ const Home = () => {
           </tbody>
         </table>
       </div>
+
       <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
         <button
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 disabled:opacity-50 transition"
+          className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-gray-200 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 disabled:opacity-50 transition"
         >
           Prev
         </button>
-        <span className="text-gray-600 text-sm md:text-base">
+        <span className="text-gray-600 dark:text-gray-300 text-sm md:text-base">
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </span>
         <button
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition"
+          className="px-4 py-2 bg-blue-500 dark:bg-blue-400 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-blue-500 disabled:opacity-50 transition"
         >
           Next
         </button>

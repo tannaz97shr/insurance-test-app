@@ -41,7 +41,6 @@ export const fetchApplications = async () => {
 };
 
 export const fetchDynamicOptions = async (field: IFormField, value: string) => {
-  console.log("get", field);
   if (field.dynamicOptions) {
     const { endpoint, method } = field.dynamicOptions;
     try {

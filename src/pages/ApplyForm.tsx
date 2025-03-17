@@ -36,22 +36,29 @@ const ApplyForm = () => {
     }
   };
 
-  console.log("form structures", formStructures);
-
   if (loading)
-    return <p className="text-center text-gray-600">Loading forms...</p>;
+    return (
+      <p className="text-center text-gray-600 dark:text-gray-300">
+        Loading forms...
+      </p>
+    );
+
   if (formStructures.length === 0)
-    return <p className="text-center text-gray-600">No forms available</p>;
+    return (
+      <p className="text-center text-gray-600 dark:text-gray-300">
+        No forms available
+      </p>
+    );
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">
+    <div className="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
+      <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">
         Apply for Insurance
       </h1>
 
       {/* Dropdown Selector */}
       <select
-        className="border border-gray-300 p-3 rounded-md mb-6 w-full text-gray-700 focus:ring-2 focus:ring-blue-500"
+        className="border border-gray-300 dark:border-gray-600 p-3 rounded-md mb-6 w-full text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500"
         onChange={(e) => {
           const selected = formStructures.find(
             (form) => form.formId === e.target.value
@@ -61,7 +68,11 @@ const ApplyForm = () => {
         value={selectedForm?.formId || ""}
       >
         {formStructures.map((form) => (
-          <option key={form.formId} value={form.formId}>
+          <option
+            key={form.formId}
+            value={form.formId}
+            className="dark:bg-gray-800 dark:text-gray-300"
+          >
             {form.title}
           </option>
         ))}
