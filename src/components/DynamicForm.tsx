@@ -22,12 +22,18 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
     Record<string, Record<string, string[]>>
   >({});
 
-  const childFields: IFormField[] = [];
-  formStructure.fields.forEach((field) => {
-    field.fields?.forEach((childField) => {
-      childFields.push(childField);
-    });
-  });
+  const childFields: IFormField[] = formStructure.fields.flatMap(
+    (field) => field.fields || []
+  );
+
+  // Extract unique dependencies
+  const dependencies = Array.from(
+    new Set(
+      childFields
+        .map((field) => field.dynamicOptions?.dependsOn)
+        .filter((dep): dep is string => Boolean(dep))
+    )
+  );
 
   // Watch fields that have dependent dynamic options
   useEffect(
@@ -39,18 +45,28 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
           [field.id]: res,
         }));
       };
-      //dependencies
-      childFields.forEach((field: IFormField) => {
-        if (field.dynamicOptions) {
-          const watchValue = watch(field.dynamicOptions.dependsOn);
-          if (watchValue) {
-            getDynamicOptions(field, watchValue);
-          }
+      console.log("depe", dependencies, "child", childFields);
+      dependencies.forEach((dep) => {
+        const watchValue = watch(dep);
+
+        if (watchValue) {
+          const dependentFields = childFields.filter((f) => f.id === dep);
+          console.log("dependentFields", dependentFields);
+          console.log("watchValue", watchValue);
+
+          dependentFields.forEach((field) =>
+            getDynamicOptions(
+              childFields.filter(
+                (chf) => chf.dynamicOptions?.dependsOn === field.id
+              )[0],
+              watchValue
+            )
+          );
         }
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    childFields.map((field) => watch(field.dynamicOptions?.dependsOn || ""))
+    dependencies.map((dep) => watch(dep))
   );
 
   // Function to check if a field should be visible
@@ -124,8 +140,7 @@ const DynamicForm = ({ formStructure, onSubmit }: DynamicFormProps) => {
                   onChange={(e) => {
                     controllerField.onChange(e.target.value);
                     if (field.dynamicOptions) {
-                      fetchDynamicOptions(field, e.target.value);
-                      setValue(field.id, ""); // Reset dependent field
+                      setValue(field.id, e.target.value);
                     }
                   }}
                 >

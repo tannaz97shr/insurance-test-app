@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchFormStructure } from "../api";
+import { fetchFormStructure, submitForm } from "../api";
 import DynamicForm from "../components/DynamicForm";
 import { IForm } from "../types/general";
 
@@ -25,6 +25,16 @@ const ApplyForm = () => {
 
     getForms();
   }, []);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await submitForm(data);
+      console.log("Form submitted successfully:", response);
+    } catch (error) {
+      console.error("Form submission failed:", error);
+    }
+  };
 
   console.log("form structures", formStructures);
 
@@ -58,7 +68,7 @@ const ApplyForm = () => {
       </select>
 
       {selectedForm && (
-        <DynamicForm formStructure={selectedForm} onSubmit={() => {}} />
+        <DynamicForm formStructure={selectedForm} onSubmit={onSubmit} />
       )}
     </div>
   );
